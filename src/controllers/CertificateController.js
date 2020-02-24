@@ -9,28 +9,43 @@ const generateToken = () => {
 }
 
 module.exports = { 
+
   async store(req, res) { 
+
     const { document } = req.params; 
+    const { slug, date } = req.body;
+
     const student = await Student.findOne({ document });
+
     if (!student) { 
       return res.status(404).json ({ status: 404, message: 'User not found'})
     } else { 
 
       const token = generateToken();
-      
-      const certificate = await Certificate.create({ 
-        token,
-        slug: req.body.slug,
-        student_id: student._id,
-        date: "01/02/2020"
-      });
 
-      const studentUpdated = await Student.update(
-        { _id: student._id }, 
-        { $push: { certificates: certificate._id }}
-      );
+      const repeatedCertificate = await Certificate.findOne({ slug });
+
+      if (repeatedCertificate) { 
+        return res.json(student); 
+      } else { 
+
+        const certificate = await Certificate.create({ 
+          token,
+          slug,
+          student_id: student._id,
+          date
+        });
+  
+        const studentUpdated = await Student.update(
+          { _id: student._id }, 
+          { $push: { certificates: certificate._id }}
+        );
+        
+        return res.json(studentUpdated);
+
+      }
       
-      return res.json(studentUpdated);
+
     }
     
   }
