@@ -36,7 +36,7 @@ module.exports = {
           date
         });
   
-        const studentUpdated = await Student.update(
+        const studentUpdated = await Student.updateOne(
           { _id: student._id }, 
           { $push: { certificates: certificate._id }}
         );

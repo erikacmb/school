@@ -9,8 +9,14 @@ routes.get('/', (req, res) => {
   return res.json({ message: 'Hello world'});
 });
 
+// list all courses
+routes.get('/courses', CourseController.list);
+
 // create course 
 routes.post('/courses', CourseController.store);
+
+// list all students
+routes.get('/students', StudentController.list);
 
 // create student
 routes.post('/students', StudentController.store);
