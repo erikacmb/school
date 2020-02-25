@@ -4,24 +4,34 @@ const StudentController = require('./controllers/StudentController');
 const CertificateController = require('./controllers/CertificateController');
 const routes = express.Router();
 
-// home
-routes.get('/', (req, res) => { 
-  return res.json({ message: 'Hello world'});
-});
+// const middleware = (req, res, next) => { 
+//   console.log('middleware');
+//   return next();
+// }
 
-// list all courses
+/*----------- COURSES -----------*/
+
+// list all
 routes.get('/courses', CourseController.list);
 
-// create course 
+// create
 routes.post('/courses', CourseController.store);
 
-// list all students
+/*----------- STUDENTS -----------*/
+
+// list all
 routes.get('/students', StudentController.list);
 
-// create student
+// create
 routes.post('/students', StudentController.store);
 
+/*----------- CERTIFICATES -----------*/
+
 // create certificate for student
-routes.post('/students/:document/certificate', CertificateController.store);
+routes.post('/certificate/:document', CertificateController.store);
+
+// verify if certificate is valid WIP
+routes.get('/certificate/:token', CertificateController.verify);
+
 
 module.exports = routes;
